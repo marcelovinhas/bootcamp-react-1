@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import TechItem from './TechItem';
+
 class TechList extends Component {
   state = { //state é imutável
     newTech: '',
@@ -26,17 +28,35 @@ class TechList extends Component {
     });
   }
 
+  handleDelete = (tech) => {
+    this.setState({ techs: this.state.techs.filter(t => t !== tech) }) //filter filtra o array
+    //retorna as tecnologias onde t for diferente de tech
+  }
+
   /*
   COMENTÁRIOS DE DENTRO DO RETURN 
   não pode adicionar dois elementos sem ter um container por volta deles
   tipos de container: <>, <div>, <form>
+
+  propriedade é tudo que passa para o component dentro da tag como por exemplo
+  tech={tech} em {this.state.techs.map(tech => <TechItem key={tech } tech={tech} />)}
+  precisa usar propriedade para passar a variável tech para outro arquivo/componente
+  onDelete é uma propriedade que é uma função
+
+  as funções que manipulam state precisam ficar no mesmo componente do state
   */
 
   render() { //todo component escrito no formato de classe precisa ter render() e dentro dele o html
     return ( //para escrever em jsx dentro do html colocar {}
       <form onSubmit={this.handleSubmit}>
         <ul>
-          {this.state.techs.map(tech => <li key={tech}>{tech}</li>)}
+          {this.state.techs.map(tech => (
+            <TechItem 
+              key={tech} 
+              tech={tech} 
+              onDelete={() => this.handleDelete(tech)}
+              />
+          ))}
         </ul>
         <input 
           type="text" 
