@@ -5,12 +5,32 @@ import TechItem from './TechItem';
 class TechList extends Component {
   state = { //state é imutável
     newTech: '',
-    techs: [
-      'Node.js',
-      'ReactJS',
-      'React Native'
-    ]
+    techs: []
   };
+
+  //ciclo de vida de um componente é todo o ciclo em que o componente aparece na tela, atualizado, modificado
+  //quando sai da tela ou deixa de existir, ele morre, exemplos de ciclo de vida: WillUnmount, DidMount, DidUpdate
+  //componentWillUnmount é executado quando o componente deixa de existir, não usa muito
+
+  //componentDidMount é executado assim que o componente aparece em tela, por exemplo chamar api
+  componentDidMount() { //para carregar as informações do local storage assim que inicializar
+    const techs = localStorage.getItem('techs'); //guarda as tecnologias cadastradas anteriormente
+
+    if (techs) { //se houver tecnologia já cadastrada, passa o dado para JSON
+      this.setState({ techs: JSON.parse(techs) });
+    }
+  }
+
+  //componentDidUpdate(prevProps, prevState) é executado sempre que houver alteração nas props ou estados
+  //acessa essas alterações por this.props ou this.state, quando não utiliza prevProps coloca _
+  componentDidUpdate(_, prevState) { 
+    if (prevState.techs !== this.state.techs) { //verifica se o estado de tecnologias anterior está diferente de agora
+      //salva no localstorage quando o usuário mudar alguma coisa, JSON.stringify para transformar em JSON
+      //local storage está dentro de inspecionar, application
+      localStorage.setItem('techs', JSON.stringify(this.state.techs));
+    }
+  }
+
   
   //sempre que quiser criar função que possua acesso a outras, tem que criar em arrow function, para ter acesso ao this
   hadleInputChange = e => {
